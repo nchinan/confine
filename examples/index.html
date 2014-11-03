@@ -1,0 +1,59 @@
+<html>
+
+  <head>
+    <title>Confine example</title>
+    <script src="../src/confine.js"></script>
+  </head>
+
+  <body>
+    <div id="svg1"></div>
+    <div id="svg2"></div>
+  <body>
+  <script type="text/javascript">
+
+  var isolate1 = confine({
+    type: "iframe",
+    path: "lib",
+    name: "svg_1_isolate",
+    deps: {
+      d3: "d3/3.4.13/d3",
+      dimple: "dimple/2.1.1/dimple"
+    }
+  }, " \
+    var svg = dimple.newSvg(window.parent.document.getElementById('svg1'), 800, 600); \
+    var data = [ \
+      { \"Word\":\"Hello\", \"Awesomeness\":2000 }, \
+      { \"Word\":\"World\", \"Awesomeness\":3000 } \
+    ]; \
+    var chart = new dimple.chart(svg, data); \
+    chart.addCategoryAxis(\"x\", \"Word\");  \
+    chart.addMeasureAxis(\"y\", \"Awesomeness\"); \
+    chart.addSeries(null, dimple.plot.bar); \
+    chart.draw(); \
+  ", function() { console.log('svg_1_isolate complete') });
+
+  var isolate2 = confine({
+    type: "iframe",
+    path: "lib",
+    name: "svg_2_isolate",
+    deps: {
+      d3: "d3/3.4.8/d3",
+      dimple: "dimple/2.0.0/dimple"
+    }
+  }, " \
+    var svg = dimple.newSvg(window.parent.document.getElementById('svg2'), 800, 600); \
+    var data = [ \
+      { \"Word\":\"Hello\", \"Awesomeness\":2000 }, \
+      { \"Word\":\"World\", \"Awesomeness\":3000 } \
+    ]; \
+    var chart = new dimple.chart(svg, data); \
+    chart.addCategoryAxis(\"x\", \"Word\");  \
+    chart.addMeasureAxis(\"y\", \"Awesomeness\"); \
+    chart.addSeries(null, dimple.plot.bar); \
+    chart.draw(); \
+  ", function() { console.log('svg_2_isolate complete') })
+
+
+  </script>
+
+</html>

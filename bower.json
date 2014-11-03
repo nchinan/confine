@@ -1,0 +1,24 @@
+{
+  "name": "confine",
+  "main": "confine.js",
+  "version": "0.1.0",
+  "description": "Solves the problem of using multiple versions of javascript libraries and executing arbitrary javascript in isolated namespaces",
+  "authors": [
+    "Neville Chinan"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/nchinan/confine",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~2.0.1",
+    "chai": "~1.9.2",
+    "jquery": "~2.1.1"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "confine",
+  "version": "0.0.1",
+  "description": "Solves the problem of using multiple versions of javascript libraries and creating isolated namespaces.",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-mocha": "~0.4.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nchinan/confine.git"
+  },
+  "author": "Neville Chinan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nchinan/confine/issues"
+  },
+  "homepage": "https://github.com/nchinan/confine"
+}
