@@ -11,11 +11,11 @@ var containerType = {
 };
 
 
-function parsecontainerType(name) {
+function parseContainerType(name) {
 
   var num = 1;
 
-  if (!name) {
+  if (!name || typeof name !== "string") {
     return num;
   }
 
@@ -50,7 +50,7 @@ function parseConfig(config) {
     config.path = "";
   }
 
-  config.type = parsecontainerType(config.type);
+  config.type = parseContainerType(config.type);
 
   return config;
 

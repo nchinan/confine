@@ -12,6 +12,10 @@
   "node"    : true,
   "validthis" : true, // for iife passing in this by default
   "globals" : {
+    "parseConfig" : false,
+    "done"        : false,
+    "containerType" : false,
+    "parseContainerType" : false,
     "window"      : false,
     "confine"     : true,
     "expect"      : false,
