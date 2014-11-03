@@ -11,8 +11,6 @@ bower install confine
 
 ##### Running Tests
 
-Install <a href="http://phantomjs.org/build.html" target="_blank">PhantomJS</a>
-
 <pre>
 npm install
 bower install
