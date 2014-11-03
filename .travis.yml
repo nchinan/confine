@@ -6,3 +6,5 @@ before_install:
   - npm install npm@1.4 -g
 before_script:
   - npm install -g grunt-cli
+  - npm install -g bower
+  - bower install
