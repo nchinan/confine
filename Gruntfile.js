@@ -1,12 +1,17 @@
 module.exports = function(grunt) {
   'use strict';
 
-  // Project configuration.
   grunt.initConfig({
+    concat: {
+      dist: {
+        src: ['src/start.js', 'src/util.js', 'src/isolate.js', 'src/container.js', 'src/end.js'],
+        dest: 'dist/confine.js',
+      },
+    },
     mocha: {
       test: {
         src: [
-          'spec/index.html'
+          'spec/*.html'
         ],
         options: {
           run: false
@@ -16,7 +21,7 @@ module.exports = function(grunt) {
     jshint: {
       all: [
         'Gruntfile.js',
-        'src/**/*.js',
+        'dist/confine.js',
         'spec/**/*.js'
       ],
       options: {
@@ -25,10 +30,11 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-contrib-jshint');
 
-  grunt.registerTask('test', ['jshint', 'mocha']);
+  grunt.registerTask('test', ['concat', 'jshint', 'mocha']);
 
   grunt.registerTask('default', ['test']);
 
