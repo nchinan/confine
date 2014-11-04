@@ -10,7 +10,7 @@ function createIframeContainer(name) {
     var container = document.createElement('iframe');
     container.style.display = "none";
     container.setAttribute('data-confine-isolation', name);
-    container.setAttribute('id', name);
+    container.setAttribute('id', name + "_frame");
     return container;
   } else {
     throw new Error("document is not defined");
@@ -26,19 +26,19 @@ function createWebworkerContainer(name) {
   throw new Error("Webworker isolation not yet supported");
 }
 
-function createContainer(deps, type, name, script, success) {
+function createContainer(config, script, success) {
 
   var container;
 
-  if (type === 1) {
-    container = createIframeContainer(name);
-  } else if (type === 2) {
-    container = createWebworkerContainer(name);
+  if (config.type === 1) {
+    container = createIframeContainer(config.name);
+  } else if (config.type === 2) {
+    container = createWebworkerContainer(config.name);
   } else {
     throw new Error("container type not supported");
   }
 
-  var isolation = createIsolation(deps, script, name, success);
+  var isolation = createIsolation(config, script, success);
   isolation.init(container);
 
   return isolation;

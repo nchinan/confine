@@ -18,9 +18,12 @@
     deps: {
       d3: "d3/3.4.13/d3",
       dimple: "dimple/2.1.1/dimple"
+    },
+    parameters : {
+      target: document.getElementById('svg1')
     }
   }, " \
-    var svg = dimple.newSvg(window.parent.document.getElementById('svg1'), 800, 600); \
+    var svg = dimple.newSvg(target, 800, 600); \
     var data = [ \
       { \"Word\":\"Hello\", \"Awesomeness\":2000 }, \
       { \"Word\":\"World\", \"Awesomeness\":3000 } \
@@ -39,9 +42,12 @@
     deps: {
       d3: "d3/3.4.8/d3",
       dimple: "dimple/2.0.0/dimple"
+    },
+    parameters: {
+      target: document.getElementById('svg2')
     }
   }, " \
-    var svg = dimple.newSvg(window.parent.document.getElementById('svg2'), 800, 600); \
+    var svg = dimple.newSvg(target, 800, 600); \
     var data = [ \
       { \"Word\":\"Hello\", \"Awesomeness\":2000 }, \
       { \"Word\":\"World\", \"Awesomeness\":3000 } \

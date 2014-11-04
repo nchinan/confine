@@ -5,14 +5,17 @@ creates a new isolation and manages dependencies
 @param {number} type
 @param {string} name
 */
-function createIsolation(deps, script, name, success) {
+function createIsolation(config, script, success) {
 
 
   var scriptCount = 0;
   var scripts = [];
-  var _name = name;
+  var _name = config.name;
   var _container;
   var _success = success;
+  var _target = config.target;
+  var _params  = config.parameters;
+  var _dependencies = config.deps;
   var userScript = script;
 
   function onScriptLoad(e) {
@@ -21,20 +24,38 @@ function createIsolation(deps, script, name, success) {
       onDependenciesLoaded();
     }
   }
-
-
+  
   function onDependenciesLoaded() {
 
-    var isolate = document.getElementById(_name);
+    var deps = [],
+        params = [],
+        paramValues = [],
+        wrappedScript,
+        fun,
+        key,
+        successCallback = "; if (this.onUserScriptLoad) { this.onUserScriptLoad(); } ",
+        depString = "",
+        isolate = document.getElementById(_name + "_frame"),
+        isolateDoc = isolate.contentDocument,
+        isolateWindow = isolate.contentWindow.window;
 
-    var uScript = document.createElement('script');
-    uScript.type = "text/javascript";
-    uScript.charset = "UTF-8";
+    for(key in _dependencies) {
+      deps.push("var " + key + " = this." + key + "; ");
+    }
 
-    var wrappedScript = userScript + '; this.onUserScriptLoad();';
+    depString = deps.join('');
 
-    uScript.innerHTML = wrappedScript;
-    isolate.contentDocument.head.appendChild(uScript);
+    for(key in _params) {
+      params.push(key);
+      paramValues.push(_params[key]);
+    }
+
+    wrappedScript = depString + userScript + successCallback;
+    params.push(wrappedScript);
+
+    fun = Function.constructor.apply(context, params);
+    fun.apply(isolateWindow, paramValues);
+
   }
 
   var isolation = {
@@ -46,9 +67,9 @@ function createIsolation(deps, script, name, success) {
     },
     onContainerLoad: function() {
       _container.contentWindow.window.onUserScriptLoad = success;
-      for (var k in deps) {
+      for (var k in config.deps) {
         var script = document.createElement('script');
-        script.src = 'lib/' + deps[k] + ".js";
+        script.src = config.path + "/" + config.deps[k] + ".js";
         script.async = false;
         script.type = "text/javascript";
         script.charset = "UTF-8";

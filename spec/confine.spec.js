@@ -16,10 +16,13 @@ describe("Confine", function() {
         path: "lib",
         name: "svg_1_isolate",
         deps: {
-          d3: "a/1.0/a",
+          a: "a/1.0/a",
+        },
+        parameters: {
+          target: document.getElementById('write')
         }
       },
-      " var elem = window.parent.document.getElementById('write'); console.log(elem); a.write(elem); ",
+      " var elem = target; console.log(elem); a.write(elem); ",
       function() {
         done();
       });

@@ -10,7 +10,7 @@ describe('Container', function() {
       assert.ok(document);
       var node = createIframeContainer("container");
       expect(node.tagName).to.equal('IFRAME');
-      expect(node.getAttribute('id')).to.equal('container');
+      expect(node.getAttribute('id')).to.equal('container_frame');
       done();
 
     });
@@ -23,7 +23,13 @@ describe('Container', function() {
 
       var message = "Webworker isolation not yet supported";
       expect(function() {
-          createContainer(null, 2, "container", null, null);
+
+          createContainer({
+            type: null,
+            path: 2,
+            name: "container",
+            deps: null
+          });
       }).to.throw(Error);
       done();
 
@@ -37,7 +43,12 @@ describe('Container', function() {
 
       var message = "Webworker isolation not yet supported";
       expect(function() {
-          createContainer(null, 4, "container", null, null);
+          createContainer({
+            type: null,
+            path: 2,
+            name: "container",
+            deps: null
+          });
       }).to.throw(Error);
       done();
 

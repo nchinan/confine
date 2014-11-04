@@ -14,7 +14,7 @@ confine = function(config, script, success, err) {
   // dependencies to a queue.  A new container is create
   // when this container is loaded
 
-  var isolation = createContainer(config.deps, config.type, config.name, script, success);
+  var isolation = createContainer(config, script, success);
 };
 
 
