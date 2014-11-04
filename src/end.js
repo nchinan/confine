@@ -6,7 +6,7 @@ The main function to create an isolation of a script
 @param {url/string} script
 @param {function} err
 */
-confine = function(config, script, success, err) {
+confine = function(config, script, callback, err) {
 
   config = parseConfig(config);
 
@@ -14,7 +14,7 @@ confine = function(config, script, success, err) {
   // dependencies to a queue.  A new container is create
   // when this container is loaded
 
-  var isolation = createContainer(config, script, success);
+  var isolation = createContainer(config, script, callback);
 };
 
 

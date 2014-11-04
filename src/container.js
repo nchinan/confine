@@ -26,7 +26,7 @@ function createWebworkerContainer(name) {
   throw new Error("Webworker isolation not yet supported");
 }
 
-function createContainer(config, script, success) {
+function createContainer(config, script, callback) {
 
   var container;
 
@@ -38,7 +38,7 @@ function createContainer(config, script, success) {
     throw new Error("container type not supported");
   }
 
-  var isolation = createIsolation(config, script, success);
+  var isolation = createIsolation(config, script, callback);
   isolation.init(container);
 
   return isolation;

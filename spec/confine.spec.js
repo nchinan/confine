@@ -22,10 +22,10 @@ describe("Confine", function() {
           target: document.getElementById('write')
         }
       },
-      " var elem = target; console.log(elem); a.write(elem); ",
-      function() {
-        done();
-      });
+      " var elem = target; a.write(elem); onFinish();",
+      [
+        { "onFinish": function() { done(); } }
+      ]);
     });
 
     it("should load javascript in isolate", function() {

@@ -8,6 +8,21 @@ module.exports = function(grunt) {
         dest: 'dist/confine.js',
       },
     },
+    // coveralls: {
+    //   options: {
+    //     // LCOV coverage file relevant to every target
+    //     src: 'coverage-results/lcov.info',
+    //
+    //     // When true, grunt-coveralls will only print a warning rather than
+    //     // an error, to prevent CI builds from failing unnecessarily (e.g. if
+    //     // coveralls.io is down). Optional, defaults to false.
+    //     force: false
+    //   },
+    //   target: {
+    //     // Target-specific LCOV coverage file
+    //     src: 'coverage-results/extra-results-*.info'
+    //   },
+    // },
     mocha: {
       test: {
         src: [
@@ -30,6 +45,7 @@ module.exports = function(grunt) {
     }
   });
 
+  // grunt.loadNpmTasks('grunt-coveralls');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-contrib-jshint');
