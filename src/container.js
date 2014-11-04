@@ -13,7 +13,7 @@ function createIframeContainer(name) {
     container.setAttribute('id', name);
     return container;
   } else {
-    throw "document is not defined";
+    throw new Error("document is not defined");
   }
 
 }
@@ -23,19 +23,19 @@ function createIframeContainer(name) {
 @
 */
 function createWebworkerContainer(name) {
-  throw "Webworker isolation not yet supported";
+  throw new Error("Webworker isolation not yet supported");
 }
 
 function createContainer(deps, type, name, script, success) {
 
   var container;
 
-  if (type === containerType.iframe) {
+  if (type === 1) {
     container = createIframeContainer(name);
-  } else if (type === containerType.webworker) {
+  } else if (type === 2) {
     container = createWebworkerContainer(name);
   } else {
-    throw "container type not supported";
+    throw new Error("container type not supported");
   }
 
   var isolation = createIsolation(deps, script, name, success);
