@@ -27,7 +27,7 @@ grunt
 var isolate = confine(options, source, callbacks, error);
 </pre>
 
-##### Confine (function)
+##### <em>Confine (function)</em>
 
 returns an `isolate` object
 
@@ -51,7 +51,7 @@ returns an `isolate` object
 
 <b>error (function)</b> - a callback for error handling.
 
-##### Isolate (object)
+##### <em>Isolate (object)</em>
 
 The following methods are accessible if you have <em>attached</em> your source to the isolate.
 
