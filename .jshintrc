@@ -12,6 +12,7 @@
   "node"    : true,
   "validthis" : true, // for iife passing in this by default
   "globals" : {
+    "createIsolation": true,
     "createObjectSource": false,
     "createScriptFunction": false,
     "createStringSource": false,

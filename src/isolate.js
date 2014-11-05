@@ -127,69 +127,82 @@ creates a new isolation and manages dependencies
 @param {number} type
 @param {string} name
 */
-function createIsolation(config, script, callbacks) {
+function createIsolation(config, script, callbacks, container) {
 
 
   var scriptCount = 0;
   var scripts = [];
   var _name = config.name;
-  var _container;
   var _target = config.target;
   var _params  = config.parameters;
   var _dependencies = config.deps;
   var _script = script;
   var _callbacks = callbacks;
+  var _container = container;
+  var _instQ = [];
 
   function onScriptLoad(e) {
     scriptCount--;
     if (scriptCount === 0) {
-      onDependenciesLoaded();
+      return onDependenciesLoaded();
     }
   }
 
   function onDependenciesLoaded() {
-    var container = document.getElementById(_name + "_frame"),
-        scriptType = typeof _script;
+    var scriptType = typeof _script;
 
     switch(scriptType) {
       case "string":
-        createStringSource(_script,_dependencies,_params, _callbacks, container);
+        createStringSource(_script,_dependencies,_params, _callbacks, _container);
         break;
       case "object":
-        createObjectSource(_script,_dependencies,_params, _callbacks, container);
+        createObjectSource(_script,_dependencies,_params, _callbacks, _container);
         break;
       case "array":
-        createArraySource(_script,_dependencies,_params, _callbacks, container);
+        createArraySource(_script,_dependencies,_params, _callbacks, _container);
         break;
       default:
         throw new Error("script must be an array, object or string");
     }
 
+    return isolation;
   }
 
   var isolation = {
-    init: function(container) {
-      _container = container;
-      _container.onload = this.onContainerLoad;
-      document.body.appendChild(_container);
-    },
-    onContainerLoad: function() {
-      for (var k in config.deps) {
-        var script = document.createElement('script');
-        script.src = config.path + "/" + config.deps[k] + ".js";
-        script.async = false;
-        script.type = "text/javascript";
-        script.charset = "UTF-8";
-        script.setAttribute('data-dep', k);
-        script.setAttribute('data-isolation', _name);
-        script.addEventListener("load", onScriptLoad);
-        script.addEventListener("error", this.onScriptError);
-        scripts.push(script);
-        _container.contentDocument.head.appendChild(script);
-        scriptCount++;
+    invoke: function(name, args) {
+
+      if (!args) {
+        args = [];
       }
-    }
+
+      return (_container.contentWindow.window[name]).apply(_container.contentWindow.window, args);
+    },
+
   };
 
-  return isolation;
+  if (!config.deps) {
+      return onDependenciesLoaded();
+  } else {
+
+    for (var k in config.deps) {
+      var scr = document.createElement('script');
+      scr.src = config.path + "/" + config.deps[k] + ".js";
+      scr.async = false;
+      scr.type = "text/javascript";
+      scr.charset = "UTF-8";
+      scr.setAttribute('data-dep', k);
+      scr.setAttribute('data-isolation', _name);
+      scr.addEventListener("load", onScriptLoad);
+      // scr.addEventListener("error", this.onScriptError);
+      scripts.push(scr);
+      _container.contentDocument.head.appendChild(scr);
+      scriptCount++;
+    }
+
+  }
+
+  // return isolation with functions that add to queue when onDepLoaded is run
+  // pick up queue items and .  Any time a function like .addScript, .. is
+  // executed run blank prototype. Test this on js fiddle.
+
 }

@@ -7,6 +7,9 @@ the dom yet.
 function createIframeContainer(name) {
 
   if (document) {
+
+    var cb = function(e) {  };
+
     var container = document.createElement('iframe');
     container.style.display = "none";
     container.setAttribute('data-confine-isolation', name);
@@ -38,9 +41,12 @@ function createContainer(config, script, callback) {
     throw new Error("container type not supported");
   }
 
-  var isolation = createIsolation(config, script, callback);
-  isolation.init(container);
+  container.onload = function() {
 
-  return isolation;
+    var isolation = createIsolation(config, script, callback, container);
+    return isolation;
+  };
+
+  document.body.appendChild(container);
 
 }
