@@ -53,10 +53,25 @@ var isolate = confine(options, source, callbacks, error);
 
 The following methods are accessible if you have <em>attached</em> your source to the isolate.
 
-<b>invoke(name, [arg,...]) (method)</b> - invokes a method (called `name`) and passes in arguments `[arg,...]`.
+<b>invoke(name, [arg,...]) (function)</b> - invokes a method (called `name`) and passes in. arguments `[arg,...]`. This will return a promise with signature `.then(success, error)`, e.g.
+<pre>
+var isolate = confine(...,
+  {
+      attach: true,
+      source: "return { a: function(b) { return b; } }"
+  },
+..);
 
-<b>get(name) (method)</b> - gets value of object (called `name`).
+isolate.invoke(a, [1]).then(function(value) {
+    console.log(value); // 1
+  });
 
-<b>set(name, value) (method)</b> - sets value of object (called `name`).
+</pre>
+
+<b>get(name) (function)</b> - gets value of object (called `name`).
+
+<b>set(name, value) (function)</b> - sets value of object (called `name`).
+
+<b>destroy (function)</b> - removes the isolate and container.
 
 </table>

@@ -152,9 +152,10 @@ describe('Isolate', function() {
 
       container = document.createElement('iframe');
       container.setAttribute('id', 'container_frame');
+      container.onload = function() {
+        done();
+      };
       document.body.appendChild(container);
-      done();
-
     });
 
     it('should return with no parameters', function(done){
@@ -168,22 +169,28 @@ describe('Isolate', function() {
       },
       null, container);
 
-      var ret = isolate.invoke('a');
+      var ret = isolate.invoke('a').then(
+        function(ret) {
+          expect(1).to.equal(ret);
+          done();
+        },
+        function(err) {
+          console.log(err);
+          done();
+        }
+      );
 
-      expect(1).to.equal(ret);
-
-      done();
 
     });
 
     it('should return no parameters with scripts', function(done){
 
       var isolate = createIsolation({
-        name: "container",
         path: "lib",
+        name: "container",
         deps: {
-          a: "a/1.0/a"
-        }
+          a: "a/1.0/a",
+        },
       },
       {
         attach: true,
@@ -191,16 +198,21 @@ describe('Isolate', function() {
       },
       null, container);
 
-      // var ret = isolate.invoke('b');
 
-      expect(1).to.equal(1);
-
-      done();
+      isolate.invoke('b').then(
+        function(ret) {
+          expect("1.0.0").to.equal(ret);
+          done();
+        },
+        function(err) {
+          expect(1).to.equal(2);
+          done();
+        }
+      );
 
     });
 
     afterEach(function(done){
-
       if (container) {
         document.body.removeChild(container);
       }

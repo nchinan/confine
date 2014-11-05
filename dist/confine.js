@@ -197,13 +197,20 @@ function createIsolation(config, script, callbacks, container) {
   var _script = script;
   var _callbacks = callbacks;
   var _container = container;
-  var _instQ = [];
+  var _promiseQ = [];
+  var _inAsync = false;
 
   function onScriptLoad(e) {
+    console.log('onScriptLoad');
     scriptCount--;
     if (scriptCount === 0) {
+      _inAsync = false;
       return onDependenciesLoaded();
     }
+  }
+
+  function onScriptError() {
+    console.log(arguments);
   }
 
   function onDependenciesLoaded() {
@@ -223,35 +230,59 @@ function createIsolation(config, script, callbacks, container) {
         throw new Error("script must be an array, object or string");
     }
 
-    return isolation;
+    invokePromises();
+
   }
 
-  var isolation = {
+  function invokePromises() {
+    while(_promiseQ.length > 0) {
+      var promise = _promiseQ.pop();
+      console.log((promise[0]).apply(_container.contentWindow.window, [promise[1], promise[2]]));
+    }
+  }
+
+  var isolate = {
     invoke: function(name, args) {
 
-      if (!args) {
-        args = [];
-      }
+        if (!args) {
+          args = [];
+        }
 
-      return (_container.contentWindow.window[name]).apply(_container.contentWindow.window, args);
+        var promise = {
+          then: function(success, error) {
+            if (!_inAsync) {
+              try {
+                var ret = (_container.contentWindow.window[name]).apply(_container.contentWindow.window, args);
+                success(ret);
+              } catch(err) {
+                error();
+              }
+            } else {
+              _promiseQ.push([this.then, success, error]);
+            }
+          }
+        };
+
+        return promise;
     },
 
   };
 
   if (!config.deps) {
-      return onDependenciesLoaded();
+      onDependenciesLoaded();
   } else {
-
+    _inAsync = true;
     for (var k in config.deps) {
       var scr = document.createElement('script');
       scr.src = config.path + "/" + config.deps[k] + ".js";
+      console.log(scr.src);
       scr.async = false;
       scr.type = "text/javascript";
       scr.charset = "UTF-8";
       scr.setAttribute('data-dep', k);
       scr.setAttribute('data-isolation', _name);
       scr.addEventListener("load", onScriptLoad);
-      // scr.addEventListener("error", this.onScriptError);
+      scr.addEventListener("error", onScriptError);
       scripts.push(scr);
       _container.contentDocument.head.appendChild(scr);
       scriptCount++;
@@ -263,6 +294,7 @@ function createIsolation(config, script, callbacks, container) {
   // pick up queue items and .  Any time a function like .addScript, .. is
   // executed run blank prototype. Test this on js fiddle.
 
+  return isolate;
 }
 
 
