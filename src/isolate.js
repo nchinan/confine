@@ -140,10 +140,9 @@ function createIsolation(config, script, callbacks, container) {
   var _callbacks = callbacks;
   var _container = container;
   var _promiseQ = [];
-  var _inAsync = false;
+  var _inAsync = true;
 
   function onScriptLoad(e) {
-    console.log('onScriptLoad');
     scriptCount--;
     if (scriptCount === 0) {
       _inAsync = false;
@@ -179,7 +178,7 @@ function createIsolation(config, script, callbacks, container) {
   function invokePromises() {
     while(_promiseQ.length > 0) {
       var promise = _promiseQ.pop();
-      console.log((promise[0]).apply(_container.contentWindow.window, [promise[1], promise[2]]));
+      (promise[0]).apply(_container.contentWindow.window, [promise[1], promise[2]]);
     }
   }
 
@@ -206,35 +205,33 @@ function createIsolation(config, script, callbacks, container) {
         };
 
         return promise;
-    },
+    }
 
   };
 
-  if (!config.deps) {
-      onDependenciesLoaded();
-  } else {
-    _inAsync = true;
-    for (var k in config.deps) {
-      var scr = document.createElement('script');
-      scr.src = config.path + "/" + config.deps[k] + ".js";
-      console.log(scr.src);
-      scr.async = false;
-      scr.type = "text/javascript";
-      scr.charset = "UTF-8";
-      scr.setAttribute('data-dep', k);
-      scr.setAttribute('data-isolation', _name);
-      scr.addEventListener("load", onScriptLoad);
-      scr.addEventListener("error", onScriptError);
-      scripts.push(scr);
-      _container.contentDocument.head.appendChild(scr);
-      scriptCount++;
+  _container.onload = function() {
+    if (!config.deps) {
+        _inAsync = false;
+        onDependenciesLoaded();
+    } else {
+      for (var k in config.deps) {
+          var scr = document.createElement('script');
+          scr.src = config.path + "/" + config.deps[k] + ".js";
+          scr.async = false;
+          scr.type = "text/javascript";
+          scr.charset = "UTF-8";
+          scr.setAttribute('data-dep', k);
+          scr.setAttribute('data-isolation', _name);
+          scr.addEventListener("load", onScriptLoad);
+          scr.addEventListener("error", onScriptError);
+          scripts.push(scr);
+          _container.contentDocument.head.appendChild(scr);
+          scriptCount++;
+      }
     }
+  };
 
-  }
-
-  // return isolation with functions that add to queue when onDepLoaded is run
-  // pick up queue items and .  Any time a function like .addScript, .. is
-  // executed run blank prototype. Test this on js fiddle.
+  document.body.appendChild(_container);
 
   return isolate;
 }

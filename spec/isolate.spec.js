@@ -152,10 +152,7 @@ describe('Isolate', function() {
 
       container = document.createElement('iframe');
       container.setAttribute('id', 'container_frame');
-      container.onload = function() {
-        done();
-      };
-      document.body.appendChild(container);
+      done();
     });
 
     it('should return with no parameters', function(done){

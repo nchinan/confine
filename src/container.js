@@ -1,4 +1,3 @@
-
 /*
 @function createIframeContainer
 Creates an iframe element but does not attach it to
@@ -7,8 +6,6 @@ the dom yet.
 function createIframeContainer(name) {
 
   if (document) {
-
-    var cb = function(e) {  };
 
     var container = document.createElement('iframe');
     container.style.display = "none";
@@ -41,12 +38,6 @@ function createContainer(config, script, callback) {
     throw new Error("container type not supported");
   }
 
-  container.onload = function() {
-
-    var isolation = createIsolation(config, script, callback, container);
-    return isolation;
-  };
-
-  document.body.appendChild(container);
-
+  var isolation = createIsolation(config, script, callback, container);
+  return isolation;
 }

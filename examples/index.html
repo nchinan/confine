@@ -2,17 +2,53 @@
 
   <head>
     <title>Confine example</title>
+    <script src="lib/d3/3.4.8/d3.js" charset="UTF-8"></script>
     <script src="../dist/confine.js"></script>
   </head>
 
   <body>
-    <div id="svg1"></div>
-    <div id="svg2"></div>
+    <div style="float: left; width: 35%">
+      <div id="notice"></div>
+      <div id="svg1"></div>
+      <a href="javascript:start()">start</a> &nbsp;&nbsp;&nbsp;
+      <a href="javascript:stop()">stop</a>
+    </div>
+    <div style="padding: 10px; float: left; width: 30%; word-wrap: break-word;">
+      <pre style="background-color: #DEDEDE" id="code"></pre>
+    </div>
   <body>
   <script type="text/javascript">
+  console.log(d3);
+  var notice = document.getElementById('notice');
+  var pre = document.getElementById('code');
 
-  var isolate1 = confine({
-    type: "iframe",
+  var code = " \
+    var chart; \
+    return { \
+      draw: function(data) { \
+        var svg = dimple.newSvg(target, 590, 400); \
+        chart = new dimple.chart(svg, data); \
+        chart.setBounds(60, 30, 510, 305); \
+        var x = chart.addCategoryAxis(\"x\", \"Animal\");  \
+        x.addOrderRule([\"Cats\", \"Dogs\", \"Mice\"]); \
+        chart.addMeasureAxis(\"y\", \"Value\"); \
+        chart.addSeries(null, dimple.plot.bar); \
+        chart.draw(); \
+      }, \
+      update: function(data) { \
+        chart.data = data; \
+        chart.draw(1000); \
+      }, \
+      getVers: function() { \
+        return [d3.version, dimple.version]; \
+      } \
+    } \
+  ";
+
+  pre.innerText = code;
+
+
+  var isolate = confine({
     path: "lib",
     name: "svg_1_isolate",
     deps: {
@@ -22,43 +58,47 @@
     parameters : {
       target: document.getElementById('svg1')
     }
-  }, " \
-    var svg = dimple.newSvg(target, 800, 600); \
-    var data = [ \
-      { \"Word\":\"Hello\", \"Awesomeness\":2000 }, \
-      { \"Word\":\"World\", \"Awesomeness\":3000 } \
-    ]; \
-    var chart = new dimple.chart(svg, data); \
-    chart.addCategoryAxis(\"x\", \"Word\");  \
-    chart.addMeasureAxis(\"y\", \"Awesomeness\"); \
-    chart.addSeries(null, dimple.plot.bar); \
-    chart.draw(); \
-  ", function() { console.log('svg_1_isolate complete') });
+  }, {
+    attach: true,
+    source: code
+  });
 
-  var isolate2 = confine({
-    type: "iframe",
-    path: "lib",
-    name: "svg_2_isolate",
-    deps: {
-      d3: "d3/3.4.8/d3",
-      dimple: "dimple/2.0.0/dimple"
+  isolate.invoke('draw', [[{ Animal: "Cats", Value: (Math.random() * 1000000) },
+    { Animal: "Dogs", Value: (Math.random() * 1000000) },
+    { Animal: "Mice", Value: (Math.random() * 1000000) }
+  ]]).then(
+    function(o) {
+
     },
-    parameters: {
-      target: document.getElementById('svg2')
+    function(e) {
+      console.log('draw error');
     }
-  }, " \
-    var svg = dimple.newSvg(target, 800, 600); \
-    var data = [ \
-      { \"Word\":\"Hello\", \"Awesomeness\":2000 }, \
-      { \"Word\":\"World\", \"Awesomeness\":3000 } \
-    ]; \
-    var chart = new dimple.chart(svg, data); \
-    chart.addCategoryAxis(\"x\", \"Word\");  \
-    chart.addMeasureAxis(\"y\", \"Awesomeness\"); \
-    chart.addSeries(null, dimple.plot.bar); \
-    chart.draw(); \
-  ", function() { console.log('svg_2_isolate complete') })
+  );
 
+  isolate.invoke('getVers').then(function(vers) {
+    var d3ver;
+    if (typeof d3 !== "undefined") {
+      d3ver = "global has d3 [" + d3.version + "] and ";
+    } else {
+      d3ver = "no global d3 ";
+    }
+    notice.innerHTML = d3ver + "isolate running d3 [" + vers[0] + "], dimple [" + vers[1] + "]";
+  });
+
+  var int;
+
+  function start() {
+   int = setInterval(function() {
+    isolate.invoke('update', [[{ Animal: "Cats", Value: (Math.random() * 1000000) },
+      { Animal: "Dogs", Value: (Math.random() * 1000000) },
+      { Animal: "Mice", Value: (Math.random() * 1000000) }
+    ]]).then(function(success) {  }, function(error) { console.log('update error'); });
+  }, 1000);
+  }
+
+  function stop() {
+    clearInterval(int);
+  }
 
   </script>
 
