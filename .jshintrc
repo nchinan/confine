@@ -12,6 +12,12 @@
   "node"    : true,
   "validthis" : true, // for iife passing in this by default
   "globals" : {
+    "createObjectSource": false,
+    "createScriptFunction": false,
+    "createStringSource": false,
+    "attachFunctions" : false,
+    "getVarsFromObject" : false,
+    "getVarsFromArray"  : false,
     "createIframeContainer" : false,
     "createContainer": false,
     "assert"      : false,
