@@ -1,5 +1,3 @@
-'use strict';
-
 var a;
 (function(context) {
 
@@ -7,7 +5,7 @@ var a;
 
     version: "1.0.0",
     write: function(elem) {
-      elem.innerHTML = "<div> version " + this.version  + "</div>";
+      elem.innerHTML = "<div> version " + this.version + "</div>";
     }
 
   };

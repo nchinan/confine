@@ -12,6 +12,8 @@
   "node"    : true,
   "validthis" : true, // for iife passing in this by default
   "globals" : {
+    "unmarkScrDep": true,
+    "isScrDepsLoaded": true,
     "createIsolation": true,
     "createObjectSource": false,
     "createScriptFunction": false,

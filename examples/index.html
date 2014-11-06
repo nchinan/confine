@@ -52,8 +52,11 @@
     path: "lib",
     name: "svg_1_isolate",
     deps: {
-      d3: "d3/3.4.13/d3",
-      dimple: "dimple/2.1.1/dimple"
+      dimple: "dimple/2.1.1/dimple",
+      d3: "d3/3.4.13/d3"
+    },
+    depend: {
+      dimple: ["d3"]
     },
     parameters : {
       target: document.getElementById('svg1')

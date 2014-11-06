@@ -13,7 +13,7 @@ Invoking `confine` will return an `isolate`.  An isolate is an context where you
 bower install confine
 </pre>
 
-##### Running Tests
+##### Running Tests/Building
 
 <pre>
 npm install
@@ -33,23 +33,24 @@ returns an `isolate` object
 
 <b>options (object)</b>
 
-* <b>name (string)</b> - a unique name for the isolate.  If this is not specified a name will be generated.
-* <b>path (string)</b> - the base path for dependencies.
-* <b>deps (object)</b> - an key value pair where keys are the global object name and the value is the path relative to `path`.
+* <b>name (string)</b> - A unique name for the isolate.  If this is not specified a name will be generated.
+* <b>path (string)</b> - The base path for dependencies.
+* <b>deps (object)</b> - A key value pair where keys are the global object name and the value is the path relative to `path`.
+* <b>depends (object)</b> - A key value pair where keys are the global object (defined in `deps`) and the value is an array of global objects that the key depends on.
 * <b>parameters (array)</b> - An array of key value pairs where the key is the parameter name and value is the value of the parameter.  These parameters are global to the sources you provide.
 
-<b>source (string)</b> - source code to be executed in the isolate.  You can access your `parameters` with in the source.
+<b>source (string)</b> - Source code to be executed in the isolate.  You can access your `parameters` within the source.
 
 <b>source (object)</b>
 
-  * <b>attach (bool)</b> - attaches script (if function body) to isolate (see isolate's `invoke` method).
+  * <b>attach (bool)</b> - Attaches script (if function body) to isolate (see isolate's `invoke` method).
   * <b>source</b> source code to executed in the isolate.
 
-<b>source (array)</b> - and array of source objects.
+<b>source (array)</b> - An array of source objects.
 
-<b>callbacks (array)</b> - an array of key value pairs where keys are the function names and values are functions to be invoked within source code.
+<b>callbacks (array)</b> - An array of key value pairs where keys are the function names and values are functions to be invoked within source code.
 
-<b>error (function)</b> - a callback for error handling.
+<b>error (function)</b> - A callback for error handling.
 
 ##### <em>Isolate (object)</em>
 
@@ -69,10 +70,6 @@ isolate.invoke(a, [1]).then(function(value) {
   });
 
 </pre>
-
-<b>get(name) (function)</b> - gets value of object (called `name`).
-
-<b>set(name, value) (function)</b> - sets value of object (called `name`).
 
 <b>destroy (function)</b> - removes the isolate and container.
 

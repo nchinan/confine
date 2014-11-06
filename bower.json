@@ -1,6 +1,6 @@
 {
   "name": "confine",
-  "main": "confine.js",
+  "main": "dist/confine.js",
   "version": "0.1.0",
   "description": "Solves the problem of using multiple versions of javascript libraries and executing arbitrary javascript in isolated namespaces",
   "authors": [
