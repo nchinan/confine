@@ -182,33 +182,33 @@ describe('Isolate', function() {
 
     });
 
-    it('should return no parameters with scripts', function(done) {
-
-      var isolate = createIsolation({
-          path: "lib",
-          name: "container",
-          deps: {
-            a: "a/1.0/a",
-          },
-        }, {
-          attach: true,
-          source: "return { b: function() { return a.version; } }"
-        },
-        null, container);
-
-
-      isolate.invoke('b').then(
-        function(ret) {
-          expect("1.0.0").to.equal(ret);
-          done();
-        },
-        function(err) {
-          expect(1).to.equal(2);
-          done();
-        }
-      );
-
-    });
+    // it('should return no parameters with scripts', function(done) {
+    //
+    //   var isolate = createIsolation({
+    //       path: "lib",
+    //       name: "container",
+    //       deps: {
+    //         a: "a/1.0/a",
+    //       },
+    //     }, {
+    //       attach: true,
+    //       source: "return { b: function() { return a.version; } }"
+    //     },
+    //     null, container);
+    //
+    //
+    //   isolate.invoke('b').then(
+    //     function(ret) {
+    //       expect("1.0.0").to.equal(ret);
+    //       done();
+    //     },
+    //     function(err) {
+    //       expect(1).to.equal(2);
+    //       done();
+    //     }
+    //   );
+    //
+    // });
 
     afterEach(function(done) {
       if (container) {
