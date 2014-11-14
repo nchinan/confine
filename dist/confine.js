@@ -329,7 +329,11 @@ function createIsolation(config, script, callbacks, container, error) {
       };
 
       return promise;
-    }
+  },
+  destroy: function() {
+    var parent = _container.parentNode;
+    parent.removeChild(_container);
+  }
 
   };
 
