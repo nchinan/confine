@@ -21,6 +21,10 @@
     "url": "https://github.com/nchinan/confine.git"
   },
   "author": "Neville Chinan",
+  "contributors": [{
+    "name": "Robert Stettner",
+    "email": "robert.stettner@gmail.com"
+  }],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/nchinan/confine/issues"

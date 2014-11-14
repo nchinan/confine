@@ -221,6 +221,45 @@ describe('Isolate', function() {
 
   });
 
+  describe('destroy', function() {
+
+    var container;
+
+    beforeEach(function(done) {
+
+      container = document.createElement('iframe');
+      container.setAttribute('id', 'container_frame');
+      done();
+    });
+
+    it('should destroy the container', function(done) {
+
+      var isolate = createIsolation({
+          name: "container"
+        }, {
+          attach: true,
+          source: "return { a: function() { return 1; } }"
+        },
+        null, container);
+
+      isolate.destroy();
+
+      expect(document.getElementById('container_frame')).to.equal(null);
+
+      done();
+    });
+
+    afterEach(function(done) {
+      try {
+        document.body.removeChild(container);
+      } catch(err) { }
+
+      done();
+
+    });
+
+  });
+
   describe('deferred dependency loading', function() {
 
     it('should know if script dependencies are loaded if it has any',
