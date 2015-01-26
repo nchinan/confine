@@ -3,3 +3,4 @@ vendor/
 node_modules/
 .grunt/
 coverage-results/
+.idea/

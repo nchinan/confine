@@ -186,9 +186,8 @@ function createIsolation(config, script, callbacks, container, error) {
 
   function onScriptLoad(e) {
 
-    // TODO: This might not work if more than 1 dep is needed using e.path[0]
-
-    var depName = e.path[0].getAttribute('data-dep');
+    // Former e.path approach was not cross-browser
+    var depName = e.target.getAttribute('data-dep');
 
     scriptCount--;
     if (scriptCount === 0) {
