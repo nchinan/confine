@@ -263,10 +263,8 @@ function createIsolation(config, script, callbacks, container, error) {
 
   function onScriptError() {
 
-    if (!_errorCallback) {
+    if (_errorCallback) {
       _errorCallback(arguments);
-    } else {
-      // console.log(arguments);
     }
 
   }
