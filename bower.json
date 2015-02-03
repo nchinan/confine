@@ -1,15 +1,17 @@
 {
   "name": "confine",
   "main": "dist/confine.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Solves the problem of using multiple versions of javascript libraries and executing arbitrary javascript in isolated namespaces",
   "authors": [
     "Neville Chinan"
   ],
-  "contributors": [{
-    "name": "Robert Stettner",
-    "email": "robert.stettner@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Robert Stettner",
+      "email": "robert.stettner@gmail.com"
+    }
+  ],
   "license": "MIT",
   "homepage": "https://github.com/nchinan/confine",
   "ignore": [
