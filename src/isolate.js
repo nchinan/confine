@@ -259,7 +259,7 @@ function createIsolation(config, script, callbacks, container, error) {
                 _container.contentWindow.window, args);
               success(ret);
             } catch (err) {
-              error();
+              error(err);
             }
           } else {
             _promiseQ.push([this.then, success, error]);

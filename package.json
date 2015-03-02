@@ -1,6 +1,6 @@
 {
   "name": "confine",
-  "version": "0.0.1",
+  "version": "0.1.3",
   "description": "Solves the problem of using multiple versions of javascript libraries and creating isolated namespaces.",
   "dependencies": {
     "mocha-lcov-reporter": "0.0.1"
