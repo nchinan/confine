@@ -243,21 +243,24 @@ function createIsolation(config, script, callbacks, container, error) {
   var _errorCallback = error;
 
   function onScriptLoad(e) {
+    try {
+      // Former e.path approach was not cross-browser
+      var depName = e.target.getAttribute('data-dep');
 
-    // Former e.path approach was not cross-browser
-    var depName = e.target.getAttribute('data-dep');
-
-    scriptCount--;
-    if (scriptCount === 0) {
-      _inAsync = false;
-      return onDependenciesLoaded();
-    } else {
-      if (_scriptDeps.length !== 0) {
-        var ret = unmarkScrDep(depName, _scriptDeps, _scriptsLoaded);
-        _scriptDeps = ret[0];
-        _scriptsLoaded = ret[1];
-        tryLoadDeferredScripts();
+      scriptCount--;
+      if (scriptCount === 0) {
+        _inAsync = false;
+        return onDependenciesLoaded();
+      } else {
+        if (_scriptDeps.length !== 0) {
+          var ret = unmarkScrDep(depName, _scriptDeps, _scriptsLoaded);
+          _scriptDeps = ret[0];
+          _scriptsLoaded = ret[1];
+          tryLoadDeferredScripts();
+        }
       }
+    } catch (err) {
+      onScriptError(err);
     }
   }
 
@@ -311,6 +314,7 @@ function createIsolation(config, script, callbacks, container, error) {
 
       var promise = {
         then: function(success, error) {
+          _errorCallback = error;
           if (!_inAsync) {
             try {
               var ret = (_container.contentWindow.window[name]).apply(
